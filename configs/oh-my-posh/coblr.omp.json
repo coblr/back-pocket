@@ -1,0 +1,80 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "palette": {
+    "plum": "#9A348E",
+    "blush": "#DA627D",
+    "salmon": "#FCA17D",
+    "gold": "#feae34",
+    "sky": "#86BBD8",
+    "ocean": "#154c79",
+    "white": "#FFFFFF",
+    "carbon": "#262b44"
+  },
+  "blocks": [
+    {
+      "alignment": "left",
+      "segments": [
+        {
+          "background": "p:ocean",
+          "foreground": "p:white",
+          "leading_diamond": "\ue0b6",
+          "trailing_diamond": "\ue0b0",
+          "style": "diamond",
+          "template": " \uf487 {{ .Dir | replace \"~/Development/\" \"\" | trimPrefix \"/\" | splitList \"/\" | first }} ",
+          "type": "git"
+        },
+        {
+          "background": "p:carbon",
+          "foreground": "p:gold",
+          "leading_diamond": "\ue0b6",
+          "trailing_diamond": "\ue0b0",
+          "properties": {
+            "style": "full",
+            "folder_separator_icon": "/"
+          },
+          "style": "diamond",
+          "template": "{{ if not .Segments.Git.HEAD }}{{ if eq .Path \"~\" }} \uf015  {{ else }} \uf115  {{ .Path }} {{ end }}{{ end }}",
+          "type": "path"
+        },
+        {
+          "background": "p:plum",
+          "foreground": "p:white",
+          "trailing_diamond": "\ue0b0",
+          "properties": {
+            "style": "folder",
+            "folder_separator_icon": "/"
+          },
+          "style": "diamond",
+          "template": "{{ if .Segments.Git.HEAD }} \uf115 {{ .Path | replace \"/Development/\" \"\" | trimPrefix \"/\" | splitList \"/\" | first }} {{ end }}",
+          "type": "path"
+        },
+        {
+          "background": "p:blush",
+          "foreground": "p:white",
+          "trailing_diamond": "\ue0b0",
+          "properties": {
+            "fetch_status": false,
+            "branch_icon": "\uf126 "
+          },
+          "style": "diamond",
+          "template": " {{ .HEAD }} ",
+          "type": "git"
+        },
+        {
+          "background": "p:salmon",
+          "foreground": "#000000",
+          "trailing_diamond": "\ue0b0",
+          "properties": {
+            "fetch_status": true
+          },
+          "style": "diamond",
+          "template": " {{ if .BranchStatus }}{{ .BranchStatus }}{{ end }}{{ if .Staging.Changed }} \uf067 {{ .Staging.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \uf187 {{ .StashCount }}{{ end }} ",
+          "type": "git"
+        }
+      ],
+      "type": "prompt"
+    }
+  ],
+  "final_space": true,
+  "version": 3
+}
