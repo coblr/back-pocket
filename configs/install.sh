@@ -33,6 +33,12 @@ ln -sf "$CONFIGS/tmux/.tmux.conf" ~/.tmux.conf
 echo "Linking zshrc..."
 ln -sf "$CONFIGS/zsh/.zshrc" ~/.zshrc
 
+echo "Linking claude code config..."
+mkdir -p ~/.claude
+ln -sf "$CONFIGS/claude/CLAUDE.md" ~/.claude/CLAUDE.md
+ln -sf "$CONFIGS/claude/settings.json" ~/.claude/settings.json
+ln -sf "$CONFIGS/claude/statusline.sh" ~/.claude/statusline.sh
+
 echo ""
 echo "Done! Open a new shell to pick up changes."
 echo ""

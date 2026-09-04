@@ -80,8 +80,6 @@ alias bal='aerospace balance-sizes'
 # AI Aliases
 # ------------
 
-# Adds a custom system prompt to Claude Code to improve actions, behavior and personality
-alias claude='claude --append-system-prompt "$(cat ~/.claude/system-prompt.txt)"'
 
 # Starts Serena MCP server and adds it to Claude for the current directory
 function serena-activate(){
@@ -91,12 +89,14 @@ function serena-activate(){
 # --------------------
 # Git Aliases
 # --------------------
-
-# git aliases
+alias refresh-gh='gh auth refresh --scopes read:packages && export GH_TOKEN=$(gh auth token) && launchctl setenv GH_TOKEN $(gh auth token) && echo "GH_TOKEN refreshed ✓"'
 alias main="git checkout main"
 
 # lists branches without putting into separate program
 alias lsbranch="git branch --list | cat"
+
+# lists all branches and worktrees
+alias gstat="echo 'Branches:' && lsbranch && echo --- && echo 'Worktrees:' && lstree"
 
 # Shows all the files that have changed in this branch (across all commits)
 alias gdif='git diff --name-only "$(git merge-base main HEAD)"'
@@ -163,9 +163,21 @@ function mkclone() {
 
   local repo_name=$(basename "$repo_url" .git)
 
+  if [[ -d "$repo_name" ]]; then
+    echo "❌ Error: Directory '$repo_name' already exists"
+    return 1
+  fi
+
+  if [[ -d ".git" ]]; then
+    echo "❌ Error: Current directory is already a git repo, refusing to proceed"
+    return 1
+  fi
+
   echo "🔄 Cloning $repo_url as bare repo..."
-  mkdir "$repo_name" && cd "$repo_name"
-  git clone --bare "$repo_url" .git
+  mkdir "$repo_name" || return 1
+  cd "$repo_name" || { rmdir "$repo_name"; return 1; }
+
+  git clone --bare "$repo_url" .git || { cd ..; rm -rf "$repo_name"; return 1; }
 
   # Set up the fetch refspec so remote branches are tracked
   git config --local remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
@@ -228,19 +240,11 @@ function mktree() {
   echo "🔄 Fetching latest from origin..."
   git -C "$project_root" fetch origin --quiet
 
-  echo "🔍 Attempting to checkout branch: $branch_name"
-  if git -C "$project_root" show-ref --verify --quiet refs/heads/"$branch_name"; then
-    # Local branch exists
-    echo "📋 Checking out existing local branch: $branch_name"
+  if git -C "$project_root" show-ref --verify --quiet refs/heads/"$branch_name" || \
+     git -C "$project_root" show-ref --verify --quiet refs/remotes/origin/"$branch_name"; then
+    echo "📋 Checking out branch: $branch_name"
     git -C "$project_root" worktree add "$worktree_path" "$branch_name"
-  elif git -C "$project_root" show-ref --verify --quiet refs/remotes/origin/"$branch_name"; then
-    # Remote branch exists but no local branch
-    echo "📋 Checking out existing remote branch: $branch_name"
-    git -C "$project_root" worktree add -b "$branch_name" "$worktree_path" "origin/$branch_name"
-    # Set upstream tracking
-    git -C "$worktree_path" branch --set-upstream-to="origin/$branch_name" "$branch_name"
   else
-    # Neither exists, create new
     echo "🆕 Creating new branch: $branch_name"
     git -C "$project_root" worktree add -b "$branch_name" "$worktree_path"
   fi

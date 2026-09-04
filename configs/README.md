@@ -32,9 +32,17 @@ The shared `.zshrc` sources this file at the end if it exists.
 
 Example things that go in `.zshrc.local`:
 - AWS credentials/region
-- Claude Code Bedrock config
 - GitHub token exports for private registries
 - Project-specific aliases (e.g. pnpm filter shortcuts)
+
+Similarly, Claude Code machine-specific settings go in `~/.claude/settings.local.json` (not tracked).
+It merges on top of the synced `settings.json` at runtime.
+
+Example things that go in `settings.local.json`:
+- `env` block (AWS profile, OTEL/telemetry endpoints and tokens)
+- `awsAuthRefresh` command
+- MCP permissions for tools only installed on this machine (e.g. Atlassian, Slack)
+- Machine-specific plugins and marketplaces
 
 ## What's included
 
@@ -45,6 +53,7 @@ Example things that go in `.zshrc.local`:
 | `oh-my-posh/`| `~/.config/oh-my-posh`   | Shell prompt theme                  |
 | `tmux/`      | `~/.tmux.conf`           | Tmux configuration                  |
 | `zsh/`       | `~/.zshrc`               | Shared shell config + worktree helpers |
+| `claude/`    | `~/.claude/CLAUDE.md`, `settings.json`, `statusline.sh` | Claude Code global config |
 
 ## Tested versions
 
