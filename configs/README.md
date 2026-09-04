@@ -35,12 +35,9 @@ Example things that go in `.zshrc.local`:
 - GitHub token exports for private registries
 - Project-specific aliases (e.g. pnpm filter shortcuts)
 
-Similarly, Claude Code machine-specific settings go in `~/.claude/settings.local.json` (not tracked).
-It merges on top of the synced `settings.json` at runtime.
-
-Example things that go in `settings.local.json`:
+Claude Code's `~/.claude/settings.json` is copied (not symlinked) from the template in
+`claude/settings.json` on first install. Add machine-specific config directly to the copy:
 - `env` block (AWS profile, OTEL/telemetry endpoints and tokens)
-- `awsAuthRefresh` command
 - MCP permissions for tools only installed on this machine (e.g. Atlassian, Slack)
 - Machine-specific plugins and marketplaces
 
@@ -53,7 +50,7 @@ Example things that go in `settings.local.json`:
 | `oh-my-posh/`| `~/.config/oh-my-posh`   | Shell prompt theme                  |
 | `tmux/`      | `~/.tmux.conf`           | Tmux configuration                  |
 | `zsh/`       | `~/.zshrc`               | Shared shell config + worktree helpers |
-| `claude/`    | `~/.claude/CLAUDE.md`, `settings.json`, `statusline.sh` | Claude Code global config |
+| `claude/`    | `~/.claude/CLAUDE.md`, `statusline.sh` (symlinked); `settings.json` (copied as template) | Claude Code global config |
 
 ## Tested versions
 

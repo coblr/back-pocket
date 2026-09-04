@@ -36,11 +36,18 @@ ln -sf "$CONFIGS/zsh/.zshrc" ~/.zshrc
 echo "Linking claude code config..."
 mkdir -p ~/.claude
 ln -sf "$CONFIGS/claude/CLAUDE.md" ~/.claude/CLAUDE.md
-ln -sf "$CONFIGS/claude/settings.json" ~/.claude/settings.json
 ln -sf "$CONFIGS/claude/statusline.sh" ~/.claude/statusline.sh
+if [[ ! -e ~/.claude/settings.json ]]; then
+  cp "$CONFIGS/claude/settings.json" ~/.claude/settings.json
+  echo "  Copied settings.json template (edit for machine-specific config)"
+else
+  echo "  settings.json already exists, skipping (template at $CONFIGS/claude/settings.json)"
+fi
 
 echo ""
 echo "Done! Open a new shell to pick up changes."
 echo ""
 echo "NOTE: You may also want to create ~/.zshrc.local for machine-specific"
 echo "config (work env vars, project aliases, etc). See README.md for details."
+echo "NOTE: Claude Code settings at ~/.claude/settings.json are copied (not linked)"
+echo "from the template. Add machine-specific config (env vars, MCP permissions) directly."
