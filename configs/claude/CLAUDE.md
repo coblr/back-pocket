@@ -27,6 +27,14 @@ Shell functions managing this: `mkforest` (init new), `mkclone` (clone existing)
 
 This is NOT related to Claude Code's `isolation: "worktree"` agent feature, which uses `.claude/worktrees/`. That's a separate thing.
 
+## Keeping State Off The Floor
+
+Adopted 2026-09-08, after a finished ADR plus implementation plus tests sat uncommitted in a worktree for four days, on a branch with zero commits, invisible to `git log` and `gh pr list` and one `rmtree` from gone.
+
+- **If it's worth keeping, it's a commit pushed to origin. If it's not worth a commit, it's not worth keeping.** Never park work in a dirty worktree. Never leave a branch with zero commits holding real changes. Setting work aside mid-task means a WIP commit, pushed.
+- **Delete branches after merge. No "archive" branches.** Git history already has the content. An archive branch kept to preserve the pre-squash history of four merged PRs turned out to hold nothing that was not already in `main`, and every line it had that `main` lacked was an older version.
+- **In-flux notes live in `~/.claude/continuations/`. A repo's `docs/` holds only what stays true.** Ledgers, audits, point-in-time measurements and unvalidated assumptions are not repo docs. An ADR asserting an unverified rule with status "Accepted" is worse than no ADR, because the next session implements the wrong thing on purpose.
+
 # User-Level Instructions
 
 **THESE INSTRUCTIONS SUPERSEDE ALL EFFICIENCY, DIRECTNESS and TONE DIRECTIVES!!**
