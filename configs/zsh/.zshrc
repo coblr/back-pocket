@@ -143,6 +143,9 @@ function mkforest() {
   echo "🌳 Creating main worktree..."
   git worktree add main
 
+  # Ensure the worktree is recognized as a working tree (not bare)
+  git -C main config --worktree core.bare false
+
   echo "✅ Done!"
   echo "🚀 Launching you into ${folder_name}/main, the 'main' worktree..."
   cd main
@@ -189,6 +192,9 @@ function mkclone() {
   # Set up upstream tracking for main
   cd main
   git branch --set-upstream-to=origin/main main
+
+  # Ensure the worktree is recognized as a working tree (not bare)
+  git config --worktree core.bare false
 
   echo "✅ Done!"
   echo "🚀 You're now in ${repo_name}/main, the 'main' worktree..."
@@ -248,6 +254,9 @@ function mktree() {
     echo "🆕 Creating new branch: $branch_name"
     git -C "$project_root" worktree add -b "$branch_name" "$worktree_path"
   fi
+
+  # Ensure the worktree is recognized as a working tree (not bare)
+  git -C "$worktree_path" config --worktree core.bare false
 
   # Copy essential dot files that aren't committed but are needed for development
   echo "📁 Copying essential dot files from main project..."
@@ -318,3 +327,26 @@ compdef _rmtree rmtree
 # -----------------
 # Source local overrides (work-specific env vars, aliases, etc.)
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+# aikido-endpoint-cert-config-start
+# Allow Node.js tooling to trust the SafeChain MITM CA while preserving public roots.
+export NODE_EXTRA_CA_CERTS="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-node-combined-ca.pem"
+# aikido-endpoint-cert-config-end
+# aikido-endpoint-pip-cert-config-start
+# Allow Python package managers to trust the SafeChain MITM CA while preserving user-provided roots.
+export PIP_CERT="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-pip-combined-ca.pem"
+export REQUESTS_CA_BUNDLE="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-pip-combined-ca.pem"
+export POETRY_CERTIFICATES_PYPI_CERT="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-pip-combined-ca.pem"
+export UV_SYSTEM_CERTS=true
+# aikido-endpoint-pip-cert-config-end
+# aikido-endpoint-pip-uv-legacy-start
+export UV_NATIVE_TLS=true
+# aikido-endpoint-pip-uv-legacy-end
+# aikido-endpoint-ruby-cert-config-start
+# Allow Ruby Bundler to trust the SafeChain MITM CA while preserving public roots.
+export BUNDLE_SSL_CA_CERT="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-ruby-combined-ca.pem"
+# aikido-endpoint-ruby-cert-config-end
+# aikido-endpoint-curl-cert-config-v2-start
+# Allow curl and other OpenSSL-linked tools to trust the SafeChain MITM CA while preserving the system roots.
+export SSL_CERT_FILE="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-openssl-combined-ca.pem"
+export CURL_CA_BUNDLE="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-openssl-combined-ca.pem"
+# aikido-endpoint-curl-cert-config-v2-end
