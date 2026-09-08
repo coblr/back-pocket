@@ -35,6 +35,25 @@ Adopted 2026-09-08, after a finished ADR plus implementation plus tests sat unco
 - **Delete branches after merge. No "archive" branches.** Git history already has the content. An archive branch kept to preserve the pre-squash history of four merged PRs turned out to hold nothing that was not already in `main`, and every line it had that `main` lacked was an older version.
 - **In-flux notes live in `~/.claude/continuations/`. A repo's `docs/` holds only what stays true.** Ledgers, audits, point-in-time measurements and unvalidated assumptions are not repo docs. An ADR asserting an unverified rule with status "Accepted" is worse than no ADR, because the next session implements the wrong thing on purpose.
 
+## No Unsubstantiated Claims
+
+Adopted 2026-09-08, after five wrong claims in one session: two from trusting a legacy code comment, one from asserting something plausible without tracing callers, one from misreading my own tool output, one from recommending before measuring. A "comments are not evidence" rule already existed and was violated twice anyway, so the fix is not another prohibition. It is requiring every claim to show its source at the point it is made.
+
+**Tag factual claims in any durable or handoff document with their evidence.** Cheap inline tags, no tooling:
+
+- `[src: path:line]` — read the executed code myself
+- `[dto: <Java path:line or exact spec path>]` — verified against the backend contract
+- `[obs: what I ran]` — observed at runtime
+- `[assume]` — explicitly not verified
+
+**An untagged claim is a hypothesis, not a finding, and nothing may be built on it.** `[assume]` is allowed and sometimes correct; hiding an assumption is not.
+
+**These are never evidence:** a code comment, a JSDoc block, a function or endpoint name, a variable name, an older doc, a schema in our own code, or my own earlier conclusion. Only executed code, a backend DTO or spec, or a live observation. Naming a source that is on this list is the same as having no source.
+
+**Verify before recommending, not after.** If a recommendation depends on a number, measure first. Reversing a recommendation once the number arrives wastes the user's attention and costs more trust than the delay would have.
+
+**When a tool's output looks impossible, suspect the tool before the code.** A function apparently named `n` and a path ending `/n` turned out to be my own `rg -r` flag rewriting every match. Re-run the read a different way before reporting a defect.
+
 # User-Level Instructions
 
 **THESE INSTRUCTIONS SUPERSEDE ALL EFFICIENCY, DIRECTNESS and TONE DIRECTIVES!!**
