@@ -39,14 +39,21 @@ Adopted 2026-09-08, after a finished ADR plus implementation plus tests sat unco
 
 Adopted 2026-09-08, after five wrong claims in one session: two from trusting a legacy code comment, one from asserting something plausible without tracing callers, one from misreading my own tool output, one from recommending before measuring. A "comments are not evidence" rule already existed and was violated twice anyway, so the fix is not another prohibition. It is requiring every claim to show its source at the point it is made.
 
-**Tag factual claims in any durable or handoff document with their evidence.** Cheap inline tags, no tooling:
+**Tag every "because" clause with its source.** Narrowed 2026-09-08, the same day it was written, because the broad version failed its first real test: a 16-rule document came out with one tag. "Tag every factual claim" is too much to sustain and so gets dropped wholesale. This version is small enough to actually follow, and it targets where the errors actually were.
+
+Every wrong claim that day was a *reason*, not a behaviour. What the code does gets read from the source and is reliable. **Why it does it is usually lifted from a comment**, and that is exactly what is never evidence. So:
+
+- **A behaviour claim needs a `file:line`.** What the code does, where.
+- **A reason claim needs a source or an `[assume]`.** Any sentence containing "because", "so that", "in order to", "the reason is", or an explanation of intent. If the only source is a comment, the tag is `[assume]`, not `[src:]`.
+
+Tags, when a claim needs one:
 
 - `[src: path:line]` — read the executed code myself
 - `[dto: <Java path:line or exact spec path>]` — verified against the backend contract
 - `[obs: what I ran]` — observed at runtime
 - `[assume]` — explicitly not verified
 
-**An untagged claim is a hypothesis, not a finding, and nothing may be built on it.** `[assume]` is allowed and sometimes correct; hiding an assumption is not.
+**An untagged "because" is a guess wearing a fact's clothes.** `[assume]` is allowed and often correct; hiding an assumption is not. When a document has many of these, say so in a header rather than pretending the whole thing is verified.
 
 **These are never evidence:** a code comment, a JSDoc block, a function or endpoint name, a variable name, an older doc, a schema in our own code, or my own earlier conclusion. Only executed code, a backend DTO or spec, or a live observation. Naming a source that is on this list is the same as having no source.
 
