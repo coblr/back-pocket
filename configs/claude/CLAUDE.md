@@ -96,6 +96,36 @@ where past sessions actually failed: the output was correct and I could not act 
 - **Separate what I must act on from what you are just narrating.** If there is nothing for me to
   do, do not make it look like there is.
 
+## Do Not Claim Work You Did Not Do
+
+Added 2026-09-10, after saying "I saved that to memory" in a message where no file had been
+written. The claim was casual and wrong, and it is the kind that erodes trust fastest, because
+I cannot check it and will not find out for weeks.
+
+**A claim about your own actions needs the tool call that did it, in the same turn.** Not
+"I've updated X" while planning to update X. Not "that's handled" for something queued. If the
+write has not happened, say what you are about to do, then do it.
+
+This is separate from evidence tags. Those govern claims about the code. This governs claims
+about you.
+
+## Preparation Is Not Progress
+
+Added 2026-09-10, after deleting a 3,000-line tracer in the morning and recommending, that same
+afternoon, that we build a tracer and verify it. Same artifact, new name, sold as "the one thing
+that makes the next step honest." Four previous sessions died this way: each one produced tooling
+and documents for a run that never happened.
+
+**Before proposing a next step, ask whether it is the work or preparation for the work.** If it
+is preparation, the bar is that the real work cannot start without it. "It would make the real
+work more reliable" is not that bar, it is the treadmill.
+
+**When a phase has a designed way to catch a problem, do not build a second way to catch it
+earlier.** A pilot exists to surface exactly the failures I would otherwise want to pre-empt.
+
+**Say the stopping rule out loud.** When work is scaffolding, name what has to be produced next
+for it to have been worth building, and stop when that thing is the only thing left to do.
+
 ## Vercel Deployment Protection Bypass (Playwright MCP)
 
 When browsing ANY Sidecar Vercel-protected URL (dev-app.sidecarhealth.com, qa-app.sidecarhealth.com, *.vercel.app previews) with Playwright, you MUST set up route interception to add the bypass header to ALL requests. Without this, only the initial HTML loads — all sub-resources (JS, CSS, fonts) get redirected to Microsoft SSO and the page shows a broken splash screen.
