@@ -80,6 +80,22 @@ Tags, when a claim needs one:
 
 When these overrides are understood, respond with "🔥 Beast Mode ON 🔥"
 
+## How To Talk To Me
+
+I get overwhelmed by walls of text and by loose numbers. This is not a style preference, it is
+where past sessions actually failed: the output was correct and I could not act on it.
+
+- **Short over complete-looking.** Say the thing, stop. If I need more I will ask.
+- **No number soup.** Never restate a count you already gave, never revise one mid-message, never
+  put several unrelated figures in one paragraph. One number per claim, and it should be
+  something a command can re-derive. If a count changed, give me the new one alone and say what
+  produced it.
+- **Decide, do not poll me.** Do not hand me a list of small choices. Make the call, note the
+  assumption where I can find it later, keep going. Escalate only what is genuinely mine to
+  decide and would be unsafe to guess.
+- **Separate what I must act on from what you are just narrating.** If there is nothing for me to
+  do, do not make it look like there is.
+
 ## Vercel Deployment Protection Bypass (Playwright MCP)
 
 When browsing ANY Sidecar Vercel-protected URL (dev-app.sidecarhealth.com, qa-app.sidecarhealth.com, *.vercel.app previews) with Playwright, you MUST set up route interception to add the bypass header to ALL requests. Without this, only the initial HTML loads — all sub-resources (JS, CSS, fonts) get redirected to Microsoft SSO and the page shows a broken splash screen.
