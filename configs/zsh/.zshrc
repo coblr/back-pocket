@@ -89,7 +89,25 @@ function serena-activate(){
 # --------------------
 # Git Aliases
 # --------------------
-alias refresh-gh='gh auth refresh --scopes read:packages && export GH_TOKEN=$(gh auth token) && launchctl setenv GH_TOKEN $(gh auth token) && echo "GH_TOKEN refreshed ✓"'
+# Sets GH_TOKEN on shel starts (useful for after reboots)
+export GH_TOKEN=$(unset GH_TOKEN GITHUB_TOKEN; gh auth token 2>/dev/null)
+
+# Grants the gh credential read:packages, then publishes it as GH_TOKEN for
+# .npmrc. Clears GH_TOKEN/GITHUB_TOKEN first, because gh auth refresh refuses to
+# touch the stored credential while either is set. New shells get GH_TOKEN from
+# the export line above; launchctl only covers GUI apps launched afterwards.
+function refresh-gh() {
+  unset GH_TOKEN GITHUB_TOKEN
+  launchctl unsetenv GH_TOKEN
+  gh auth refresh --scopes read:packages || return
+  local token
+  token=$(gh auth token) || return
+  export GH_TOKEN=$token
+  launchctl setenv GH_TOKEN "$token"
+  echo "GH_TOKEN refreshed ✓"
+  # Already-running apps (Claude Code, editors) do not inherit a launchctl
+  # setenv, so they need: export GH_TOKEN=$(launchctl getenv GH_TOKEN)
+}
 alias main="git checkout main"
 
 # lists branches without putting into separate program
@@ -330,6 +348,10 @@ compdef _rmtree rmtree
 # aikido-endpoint-cert-config-start
 # Allow Node.js tooling to trust the SafeChain MITM CA while preserving public roots.
 export NODE_EXTRA_CA_CERTS="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-node-combined-ca.pem"
+case "${NODE_OPTIONS:-}" in
+  *--use-openssl-ca*) unset NODE_USE_SYSTEM_CA ;;
+  *) export NODE_USE_SYSTEM_CA=1 ;;
+esac
 # aikido-endpoint-cert-config-end
 # aikido-endpoint-pip-cert-config-start
 # Allow Python package managers to trust the SafeChain MITM CA while preserving user-provided roots.
