@@ -41,9 +41,9 @@ Adopted 2026-09-08, after five wrong claims in one session: two from trusting a 
 
 **Tag every "because" clause with its source.** Narrowed 2026-09-08, the same day it was written, because the broad version failed its first real test: a 16-rule document came out with one tag. "Tag every factual claim" is too much to sustain and so gets dropped wholesale. This version is small enough to actually follow, and it targets where the errors actually were.
 
-Every wrong claim that day was a *reason*, not a behaviour. What the code does gets read from the source and is reliable. **Why it does it is usually lifted from a comment**, and that is exactly what is never evidence. So:
+Every wrong claim that day was a *reason*, not a behavior. What the code does gets read from the source and is reliable. **Why it does it is usually lifted from a comment**, and that is exactly what is never evidence. So:
 
-- **A behaviour claim needs a `file:line`.** What the code does, where.
+- **A behavior claim needs a `file:line`.** What the code does, where.
 - **A reason claim needs a source or an `[assume]`.** Any sentence containing "because", "so that", "in order to", "the reason is", or an explanation of intent. If the only source is a comment, the tag is `[assume]`, not `[src:]`.
 
 Tags, when a claim needs one:
@@ -113,6 +113,7 @@ What survived: I use about 70 connectives per thousand words where Claude uses a
 "being fired at" feeling comes from missing joints rather than from short sentences.
 
 - **No em dashes.** Use "because", "but", "and so". Most em dashes are a missing "because".
+- **American spelling.** "behavior", "color", "catalog", "center", "-ize". This applies to everything you write, including docs and commits, even when the surrounding files use British spelling.
   Colons and semicolons are fine.
 - **State the joint.** Do not put a period where a conjunction belongs. Two related thoughts
   split by a full stop makes me infer the relationship myself, and stacked up that reads like
