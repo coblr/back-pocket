@@ -215,3 +215,7 @@ After bypassing Vercel protection, you'll land on the app's own login page (`/lo
 ## Skill Triggers
 
 - "set up a workspace", "start work on", "set up for [ticket/branch]" → invoke `/start-work`
+
+## People
+
+- Shelby Moulden (GitHub `smoulden247`, sidecar-ui teammate, design) is he/him. His deliberate design calls count as design sign-off.
