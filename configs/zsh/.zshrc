@@ -79,7 +79,12 @@ alias bal='aerospace balance-sizes'
 # ------------
 # AI Aliases
 # ------------
+# Don't send telemetry to no-mistakes author
+export NO_MISTAKES_TELEMETRY=0
 
+# Launches the Firstmate first mate with the calm mod enabled
+# Passes arguments through, so `fm --resume <session-id>` resumes a session
+fm() { (cd ~/firstmate && CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1 claude "$@") }
 
 # Starts Serena MCP server and adds it to Claude for the current directory
 function serena-activate(){
