@@ -104,7 +104,7 @@ export GH_TOKEN=$(unset GH_TOKEN GITHUB_TOKEN; gh auth token 2>/dev/null)
 function refresh-gh() {
   unset GH_TOKEN GITHUB_TOKEN
   launchctl unsetenv GH_TOKEN
-  gh auth refresh --scopes read:packages || return
+  gh auth refresh --scopes read:packages,workflow || return
   local token
   token=$(gh auth token) || return
   export GH_TOKEN=$token
