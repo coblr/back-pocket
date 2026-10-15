@@ -30,8 +30,26 @@ ln -sf "$CONFIGS/oh-my-posh" ~/.config/oh-my-posh
 echo "Linking tmux..."
 ln -sf "$CONFIGS/tmux/.tmux.conf" ~/.tmux.conf
 
-echo "Linking zshrc..."
-ln -sf "$CONFIGS/zsh/.zshrc" ~/.zshrc
+# ~/.zshrc is a machine-local loader, not a symlink, because installers such as
+# Aikido append to ~/.zshrc and would otherwise write into this repo.
+echo "Setting up zshrc loader..."
+ZSHRC_SOURCE="source \"$CONFIGS/zsh/.zshrc\""
+if [[ -L ~/.zshrc || ! -e ~/.zshrc ]]; then
+  rm -f ~/.zshrc
+  {
+    echo "# Machine-local loader. Not tracked: installers such as Aikido append here,"
+    echo "# so their lines stay on this machine instead of landing in back-pocket."
+    echo "# Personal machine-specific config goes in ~/.zshrc.local instead."
+    echo "$ZSHRC_SOURCE"
+  } > ~/.zshrc
+  echo "  Wrote ~/.zshrc loader"
+elif ! grep -qF "$ZSHRC_SOURCE" ~/.zshrc; then
+  cp ~/.zshrc ~/.zshrc.pre-back-pocket
+  { echo "$ZSHRC_SOURCE"; echo; cat ~/.zshrc.pre-back-pocket; } > ~/.zshrc
+  echo "  Prepended the loader line to existing ~/.zshrc (backup at ~/.zshrc.pre-back-pocket)"
+else
+  echo "  ~/.zshrc already loads the shared config, skipping"
+fi
 
 echo "Linking claude code config..."
 mkdir -p ~/.claude

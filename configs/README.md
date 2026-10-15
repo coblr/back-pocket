@@ -27,6 +27,11 @@ to this repo. Edits in either location are the same file.
 
 ### Machine-specific config
 
+`~/.zshrc` is not a symlink. The installer writes it as a small machine-local loader that
+sources the shared `zsh/.zshrc`, because some installers (Aikido's endpoint protection, for
+one) append to `~/.zshrc`, and through a symlink their lines landed in this repo. Whatever
+they append now stays in the loader on that machine.
+
 Work-specific environment variables, aliases, and paths go in `~/.zshrc.local` (not tracked).
 The shared `.zshrc` sources this file at the end if it exists.
 
@@ -49,7 +54,7 @@ Claude Code's `~/.claude/settings.json` is copied (not symlinked) from the templ
 | `ghostty/`   | `~/.config/ghostty`      | Terminal theme + transparency        |
 | `oh-my-posh/`| `~/.config/oh-my-posh`   | Shell prompt theme                  |
 | `tmux/`      | `~/.tmux.conf`           | Tmux configuration                  |
-| `zsh/`       | `~/.zshrc`               | Shared shell config + worktree helpers |
+| `zsh/`       | `~/.zshrc` (loader that sources it) | Shared shell config + worktree helpers |
 | `claude/`    | `~/.claude/CLAUDE.md`, `statusline.sh` (symlinked); `settings.json` (copied as template) | Claude Code global config |
 
 ## Tested versions
