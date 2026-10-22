@@ -1,31 +1,6 @@
 # User Context
 
-Senior software engineer. Node.js/TypeScript, pnpm. macOS with aerospace WM, tmux, zsh + oh-my-posh, nvim.
-
-## Git Worktree "Forest" Convention
-
-All repos in ~/Development use a bare-repo + worktree layout ("forests"):
-
-```
-~/Development/<repo-name>/
-  .git/          ← bare repo (no working tree here)
-  .claude/       ← Claude Code project config (if present)
-  main/          ← worktree checked out to main branch
-  feat/
-    my-feature/  ← worktree checked out to feat/my-feature
-  fix/
-    bug-123/     ← worktree checked out to fix/bug-123
-```
-
-Key rules:
-- The repo root (`~/Development/<repo-name>/`) is NOT a working tree — it only contains `.git/`, `.claude/`, and worktree directories
-- `main/` is always the main branch worktree
-- Other worktrees are directories matching their branch name (e.g., `feat/new-thing` branch → `feat/new-thing/` directory)
-- Tracked files come from git checkout automatically; untracked dotfiles (`.env*`, `.npmrc`) are copied from `main/` into new worktrees on creation
-
-Shell functions managing this: `mkforest` (init new), `mkclone` (clone existing), `mktree` (add worktree), `rmtree` (remove worktree), `lstree` (list). Defined in `~/.zshrc`.
-
-This is NOT related to Claude Code's `isolation: "worktree"` agent feature, which uses `.claude/worktrees/`. That's a separate thing.
+Senior software engineer. Node.js/TypeScript, pnpm. macOS with aerospace WM, herdr, zsh + oh-my-posh, nvim.
 
 ## Keeping State Off The Floor
 
@@ -59,11 +34,14 @@ Tags, when a claim needs one:
 
 **Verify before recommending, not after.** If a recommendation depends on a number, measure first. Reversing a recommendation once the number arrives wastes the user's attention and costs more trust than the delay would have.
 
-**Where the tags live.** Added 2026-09-17. In chat, tag only the claim my decision hinges on
-and put the rest in the `sources` block described under "How To Word It". In anything that
-outlives the conversation and gets read without it, the full rule applies with no exceptions:
-PR descriptions, review comments, commit messages, ADRs, repo docs, continuation notes, Jira
-tickets. Chat scrolls away while the artifact is what someone acts on three weeks later.
+**Where the tags live.** In chat, tag only the claim my decision hinges on and put the rest in
+the `sources` block described under "How To Word It".
+
+Artifacts humans read (PR descriptions, review comments, commit messages, Slack, Jira tickets,
+repo docs) get plain prose with no tags. When you hand me a draft of one, its `sources` block
+comes with it in chat. Unverified claims still get a hedge ("looks like") in the artifact.
+
+Artifacts agents read (ADRs, continuation notes, briefs) keep the full rule with no exceptions.
 
 **When a tool's output looks impossible, suspect the tool before the code.** A function apparently named `n` and a path ending `/n` turned out to be my own `rg -r` flag rewriting every match. Re-run the read a different way before reporting a defect.
 
@@ -101,17 +79,6 @@ where past sessions actually failed: the output was correct and I could not act 
   decide and would be unsafe to guess.
 - **Separate what I must act on from what you are just narrating.** If there is nothing for me to
   do, do not make it look like there is.
-
-## How To Word It
-
-Added 2026-09-16, after measuring 1343 of my typed messages against 6493 of Claude's, pulled
-from ~/.claude/projects. Two hypotheses died on the way. Sentence length was not the problem,
-because my median sentence runs 12 words and Claude's runs 14. And my near-zero use of bold
-turned out to be a terminal input artifact rather than a preference, so bold is fine.
-
-What survived: I use about 70 connectives per thousand words where Claude uses about 53, so the
-"being fired at" feeling comes from missing joints rather than from short sentences.
-
 - **No em dashes.** Use "because", "but", "and so". Most em dashes are a missing "because".
 - **American spelling.** "behavior", "color", "catalog", "center", "-ize". This applies to everything you write, including docs and commits, even when the surrounding files use British spelling.
   Colons and semicolons are fine.
@@ -120,8 +87,7 @@ What survived: I use about 70 connectives per thousand words where Claude uses a
   being fired at.
 - **No mic drops.** Do not frame ordinary information as a reveal. If it is not a conclusion,
   do not shape it like one.
-- **Unpack compressed noun phrases.** "the kept API additions" becomes "the API additions we're
-  keeping". More words, less work to read.
+- **Unpack compressed noun phrases.** More words is less work to read.
 - **Name the unit on a count.** "Four done" becomes "four pushes done". Same instinct as the
   no-number-soup rule above.
 - **Keep real hedges.** If you did not verify it, say "looks like" instead of stating it flat.
@@ -136,9 +102,7 @@ What survived: I use about 70 connectives per thousand words where Claude uses a
 - **Interruption points, not time estimates.** Tell me whether I can walk away and where you
   will need me. Minutes are meaningless because I multitask and because you are faster than
   you estimate.
-- **Headlines first.** Replaced "length follows mode" on 2026-09-17, because that rule let
-  Claude decide when it had room and so it never bound; the median reply grew from 329 to 431
-  characters in the days after it was added. Default a reply to the state of the world plus the
+- **Headlines first.** Default a reply to the state of the world plus the
   decision, at roughly 100 words, and stop. Evidence, mechanism and alternatives wait until I
   ask. The point is that the escape hatch is mine to pull, not yours. Automatic exceptions:
   I say "explain", "walk me through" or "teach me", or I ask what my options are, since there
@@ -161,7 +125,7 @@ sources
 
 ## Do Not Claim Work You Did Not Do
 
-Added 2026-09-10, after saying "I saved that to memory" in a message where no file had been
+After saying "I saved that to memory" in a message where no file had been
 written. The claim was casual and wrong, and it is the kind that erodes trust fastest, because
 I cannot check it and will not find out for weeks.
 
@@ -173,11 +137,6 @@ This is separate from evidence tags. Those govern claims about the code. This go
 about you.
 
 ## Preparation Is Not Progress
-
-Added 2026-09-10, after deleting a 3,000-line tracer in the morning and recommending, that same
-afternoon, that we build a tracer and verify it. Same artifact, new name, sold as "the one thing
-that makes the next step honest." Four previous sessions died this way: each one produced tooling
-and documents for a run that never happened.
 
 **Before proposing a next step, ask whether it is the work or preparation for the work.** If it
 is preparation, the bar is that the real work cannot start without it. "It would make the real
@@ -207,14 +166,9 @@ await page.route('**/*', async (route) => {
   await route.continue({ headers });
 });
 ```
-
 **DO NOT** use `?x-vercel-protection-bypass=` query params or `get_access_to_vercel_url` MCP tool for custom domains — they fail on legacy apps with SAML enforcement.
 
 After bypassing Vercel protection, you'll land on the app's own login page (`/login`) — that's a separate auth layer.
-
-## Skill Triggers
-
-- "set up a workspace", "start work on", "set up for [ticket/branch]" → invoke `/start-work`
 
 ## People
 
