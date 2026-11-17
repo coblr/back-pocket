@@ -20,6 +20,22 @@ return {
     },
   },
 
+  -- render markdown in the buffer (tables, headings, checkboxes); :RenderMarkdown toggle
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    ft = { "markdown" },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = {},
+  },
+
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = function(_, opts)
+      opts.ensure_installed = opts.ensure_installed or {}
+      vim.list_extend(opts.ensure_installed, { "markdown", "markdown_inline" })
+    end,
+  },
+
   -- test new blink
   -- { import = "nvchad.blink.lazyspec" },
 
